@@ -3,6 +3,15 @@ Ice Detection with Sentinel-1 SAR Backscatter Threshold
 Edvinas Stonevicius
 2022-04-10
 
+-   [1 Introduction](#1-introduction)
+-   [2 Data](#2-data)
+-   [3 Backscatter from Ice and Open
+    Water](#3-backscatter-from-ice-and-open-water)
+-   [4 Logistic Classification Model](#4-logistic-classification-model)
+-   [5 Classification Threshold](#5-classification-threshold)
+-   [6 Model Validation](#6-model-validation)
+-   [7 Conclusions](#7-conclusions)
+
 ``` r
 library(data.table)
 library(ggplot2)
@@ -11,7 +20,7 @@ library(cowplot)
 library(scales)
 ```
 
-# Introduction
+# 1 Introduction
 
 Climate change leads to more variable meteorological conditions. In many
 Northern Hemisphere temperate regions, cold seasons have become more
@@ -27,7 +36,7 @@ regression.
 
 <img src="Figures/Figure_1.png" title="Figure 1. The Lithuanian part of the Nemunas and Neris Rivers, the location of hydrological stations (black dots) with available ground observation data and river sections (color stripes) covered by the matching Sentinel-1 SAR and Sentinel-2 MSI observations used for the development and validation of the river ice detection models." alt="Figure 1. The Lithuanian part of the Nemunas and Neris Rivers, the location of hydrological stations (black dots) with available ground observation data and river sections (color stripes) covered by the matching Sentinel-1 SAR and Sentinel-2 MSI observations used for the development and validation of the river ice detection models." width="50%" style="display: block; margin: auto;" />
 
-# Data
+# 2 Data
 
 We used matchups (within a 24 h window) between the Sentinel-1 SAR IW
 GRD High-Resolution and Sentinel-2 MSI Level1C acquisitions during the
@@ -44,7 +53,7 @@ GRD High-Resolution and Sentinel-2 MSI Level1C acquisitions during the
     ##  $ Sigma0      : num  -10 -11.1 -11.9 -11 -11.1 ...
     ##  - attr(*, ".internal.selfref")=<externalptr>
 
-# Backscatter from Ice and Open Water
+# 3 Backscatter from Ice and Open Water
 
 To determine the optimal threshold between backscatter from water and
 ice, we analyzed the distribution of SAR backscatter values from river
@@ -85,7 +94,7 @@ trial-and-error method, we decided to use only pixels located farther
 than 30 m away from riverbanks, thus removing pixels that could cause
 uncertainty.
 
-# Logistic Classification Model
+# 4 Logistic Classification Model
 
 We used linear logistic model :
 
@@ -186,7 +195,7 @@ model_coeff<-round(logit_model_coeff(d),2)
   log(p/(1 - p)) = 7.8 + 0.76 * VV_{Sigma0}  -0.07 * VH_{Sigma0}
 ")
 
-# Classification Threshold
+# 5 Classification Threshold
 
 To use SAR backscatter values in binary classification, the threshold
 dividing the ice and water classes must be estimated. In this study, we
@@ -433,7 +442,7 @@ for river ice detection:
   Logistic_{ice} = 7.8 + 0.76 * VV_{Sigma0}  -0.07 * VH_{Sigma0} \ge 0.24 dB
 ")
 
-# Model Validation
+# 6 Model Validation
 
 The goal of binary classification is to assign discrete classes to
 continuous data. This discrimination between ice and open water classes
@@ -661,7 +670,7 @@ water pixels. In case of this experimentation, 10% of pixels in our
 training dataset representing backscatter from open water in late spring
 and early autumn would be misclassified as ice.
 
-# Conclusions
+# 7 Conclusions
 
 The river ice detection based on optical data had large uncertainties
 related to cloud cover and shadows. Thus, it cannot be reliably used as
