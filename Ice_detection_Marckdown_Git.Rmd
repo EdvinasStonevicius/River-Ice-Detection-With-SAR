@@ -3,7 +3,11 @@ title: "Ice Detection with Sentinel-1 SAR Backscatter Threshold"
 author: "Edvinas Stonevicius"
 date: '2022-04-10'
 
-output: github_document
+output: 
+  github_document:
+    toc: TRUE
+    number_sections: TRUE
+    
 ---
 
 ```{r Checkpoint, include=FALSE}
